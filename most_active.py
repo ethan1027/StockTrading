@@ -21,9 +21,9 @@ def get_aggregated_volume(ticker: str):
 
 api_key = 'AKMSXURYBJ1CHOHYN396'
 
-kevin_tickers = pd.read_csv('kevin-tickers.csv')
-print('tickers count', len(kevin_tickers.columns))
+k_tickers = pd.read_csv('k_tickers.csv')
+print('tickers count', len(k_tickers.columns))
 num_cores = multiprocessing.cpu_count()
 print('num of cores', num_cores)
-results = Parallel(n_jobs=num_cores)(delayed(get_aggregated_volume)(ticker) for ticker in kevin_tickers)
+results = Parallel(n_jobs=num_cores)(delayed(get_aggregated_volume)(ticker) for ticker in k_tickers)
 print(results[0])
