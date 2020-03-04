@@ -24,9 +24,11 @@ class KstockModel:
     def __repr__(self):
         current_vol = self.current['v']
         price = self.current['c']
-        movement = '⬆️' if self.active_ratio > 1.0 else '⬇️'
+        movement = '⬆️' if self.active_ratio > 0.0 else '⬇️'
         percentage = '{:.1%}'.format(self.active_ratio)
-        return f'{self.ticker}, current volume: {current_vol}, avg volume: {self.avg_vol}, price: {price}, volume_movement: {movement}{percentage}'
+        f_cur_vol = f'{current_vol:,}'
+        f_avg_vol = f'{self.avg_vol:,}'
+        return f'{self.ticker:<9}|{f_cur_vol:>12} |{f_avg_vol:>12} |{price:>7} | {movement} {percentage}'
 
 def get_stock_details(ticker: str):
     try:
@@ -45,17 +47,16 @@ def get_historical_stock(ticker: str):
 
 def get_avg_volume(historical_stock) -> KstockModel:
     volumes = [result['v'] for result in historical_stock['results']]
-    avg_vol = statistics.mean(volumes)
+    avg_vol = int(statistics.mean(volumes))
     return KstockModel(historical_stock['ticker'], avg_vol)
 
 def get_ticker_snapshot(k_stock_model: KstockModel) -> KstockModel:
     snap_shot = requests.get(f'https://api.polygon.io//v2/snapshot/locale/us/markets/stocks/tickers/{k_stock_model.ticker}?apiKey={api_key}').json()
-    print(snap_shot)
     k_stock_model.current = snap_shot['ticker']['day']
-    k_stock_model.active_ratio = k_stock_model.current['v'] / k_stock_model.avg_vol
+    k_stock_model.active_ratio = k_stock_model.current['v'] / k_stock_model.avg_vol - 1.0
     return k_stock_model
 
-k_tickers = pd.read_csv('k_tickers.csv')
+k_tickers = pd.read_csv('test_tickers.csv')
 print('tickers count', len(k_tickers.columns))
 num_cores = multiprocessing.cpu_count()
 print('num of cores', num_cores)
@@ -63,5 +64,9 @@ historical_stocks = Parallel(n_jobs=num_cores)(delayed(get_historical_stock)(tic
 avg_volumes = [get_avg_volume(stock) for stock in historical_stocks]
 k_stock_models = Parallel(n_jobs=num_cores)(delayed(get_ticker_snapshot)(avg_vol) for avg_vol in avg_volumes)
 k_stock_models.sort()
-print(k_stock_models)
+with open('sample.txt', 'w') as f:
+    f.write('ticker	 |     cur vol |     avg vol |  price |   move %\n')
+    f.write('--------|-------------|-------------|--------|----------\n')
+    for m in k_stock_models:
+        f.write(repr(m) + '\n')
 
