@@ -13,6 +13,9 @@ matplotlib = "*"
 polygon-api-client = "*"
 joblib = "*"
 pandas = "*"
+google-api-python-client = "*"
+google-auth-httplib2 = "*"
+google-auth-oauthlib = "*"
 
 [requires]
-python_version = "3.8"
+python_version = "3.8.1"
