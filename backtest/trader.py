@@ -1,11 +1,11 @@
 import backtrader as bt
 from datetime import datetime
-from strategy import SmaCross
+from .strategy import SmaCross
 
-if __name__ == '__main__':
+def run():
     cerebro = bt.Cerebro()
     cerebro.addstrategy(SmaCross)
-    data = bt.feeds.YahooFinanceData(dataname='ZOOM', fromdate=datetime(2018, 11, 30))
-    cerebro.adddata(data)
-    cerebro.run()
-    cerebro.plot(style='candle')
+    data = bt.feeds.GenericCSVData(dataname='YHOO', fromdate=datetime(2016, 1, 1), todate=datetime(2016, 2, 1))
+    # cerebro.adddata(data)
+    # cerebro.run()
+    # cerebro.plot(start=datetime(2019, 1, 1), end=datetime(2019, 12, 1))
