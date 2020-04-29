@@ -1,10 +1,6 @@
 import backtrader as bt
 from datetime import datetime
-from .strategy.ma_strategy1 import MaStrategy1
-from .strategy.ma_strategy2 import MaStrategy2
-from .strategy.ma_strategy3 import MaStrategy3
-from .strategy.ma_strategy4 import MaStrategy4
-from .strategy.ma_strategy5 import MaStrategy5
+from .strategy.ma_strategy import *
 
 
 def run(ticker: str):
@@ -20,7 +16,7 @@ def run(ticker: str):
     volume=5,
     openinterest=-1)
     cerebro.adddata(data)
-    cerebro.addstrategy(MaStrategy2)
+    cerebro.addstrategy(AmaStrategy2)
     cerebro.addanalyzer(bt.analyzers.SharpeRatio, _name='mysharpe')
     strats = cerebro.run()
     print(cerebro.getbroker().getvalue())
