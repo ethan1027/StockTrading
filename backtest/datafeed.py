@@ -1,4 +1,5 @@
 import sys
+import argparse
 import requests
 import pprint
 from datetime import date, datetime, timezone, timedelta
@@ -10,9 +11,12 @@ api_key = 'AKMSXURYBJ1CHOHYN396'
 def get_historical_stock(ticker: str, **kwargs):
     start = kwargs.get('start', str(date.today()  - timedelta(days=280)))
     end =  kwargs.get('end', str(date.today() - timedelta(days=1)))
+    timespan = kwargs.get('timespan', 'day')
+    multiplier = kwargs.get('multiplier', 1)
+
     print(f'execute in time range start={start}, end={end}')
     try:
-        return requests.get(f'https://api.polygon.io/v2/aggs/ticker/{ticker}/range/1/day/{start}/{end}?apiKey={api_key}').json()
+        return requests.get(f'https://api.polygon.io/v2/aggs/ticker/{ticker}/range/{multiplier}/{timespan}/{start}/{end}?apiKey={api_key}').json()
     except:
         raise Exception('unable to get data from Polygon')
 
