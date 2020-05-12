@@ -21,21 +21,22 @@ while True:
         print('market open.', alpaca.get_clock())
         fast_series, _ = ti.get_wma(symbol, interval='15min', time_period=4)
         slow_series, _ = ti.get_wma(symbol, interval='15min', time_period=32)
-        fast = fast_series.iloc[-1]
-        slow = slow_series.iloc[-1]
+        fast = fast_series.iloc[-1]['WMA']
+        slow = slow_series.iloc[-1]['WMA']
         print(f'fast: {fast}, slow: {slow}')
-        if len(alpaca.list_positions()) == 0 and fast > slow:
-            equity = 5000 + alpaca.get_account().equity - 100000
-            price = alpaca.polygon.last_trade(symbol).price
-            qty = equity // price - 1
-            buy_order = alpaca.submit_order(
-                symbol=symbol,
-                qty=qty,
-                side='buy',
-                type='market',
-                time_in_force='day'
-            )
-            print('BUY', buy_order)
+        if len(alpaca.list_positions()) == 0:
+            if  fast > slow:
+                equity = 5000 + alpaca.get_account().equity - 100000
+                price = alpaca.polygon.last_trade(symbol).price
+                qty = equity // price - 1
+                buy_order = alpaca.submit_order(
+                    symbol=symbol,
+                    qty=qty,
+                    side='buy',
+                    type='market',
+                    time_in_force='day'
+                )
+                print('BUY', buy_order)
         elif fast < slow:
             sell_order = alpaca.submit_order(
                 symbol=symbol,
