@@ -18,7 +18,7 @@ symbol = 'RP'
 while True:
     print(alpaca.get_clock())
     print('position', alpaca.list_positions())
-    if True or alpaca.get_clock().is_open:
+    if alpaca.get_clock().is_open:
         fast_series, _ = ti.get_wma(symbol, interval='15min', time_period=4)
         slow_series, _ = ti.get_wma(symbol, interval='15min', time_period=32)
         fast = fast_series.iloc[-1]['WMA']
