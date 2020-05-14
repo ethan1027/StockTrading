@@ -16,9 +16,9 @@ alpaca = tradeapi.REST(API_KEY, API_SECRET, APCA_API_BASE_URL, 'v2')
 ti = TechIndicators(key=ALPHAVANTAGE_KEY, output_format='pandas')
 symbol = 'RP'
 while True:
-    print(alpaca.list_positions())
-    if alpaca.get_clock().is_open:
-        print('market open.', alpaca.get_clock())
+    print(alpaca.get_clock())
+    print('position', alpaca.list_positions())
+    if True or alpaca.get_clock().is_open:
         fast_series, _ = ti.get_wma(symbol, interval='15min', time_period=4)
         slow_series, _ = ti.get_wma(symbol, interval='15min', time_period=32)
         fast = fast_series.iloc[-1]['WMA']
@@ -26,17 +26,18 @@ while True:
         print(f'fast: {fast}, slow: {slow}')
         if len(alpaca.list_positions()) == 0:
             if  fast > slow:
-                equity = 5000 + alpaca.get_account().equity - 100000
+                equity = 5000 + int(alpaca.get_account().equity) - 100000
                 price = alpaca.polygon.last_trade(symbol).price
                 qty = equity // price - 1
-                buy_order = alpaca.submit_order(
-                    symbol=symbol,
-                    qty=qty,
-                    side='buy',
-                    type='market',
-                    time_in_force='day'
-                )
-                print('BUY', buy_order)
+                if qty > 0:
+                    buy_order = alpaca.submit_order(
+                        symbol=symbol,
+                        qty=qty,
+                        side='buy',
+                        type='market',
+                        time_in_force='day'
+                    )
+                    print('BUY', buy_order)
         elif fast < slow:
             sell_order = alpaca.submit_order(
                 symbol=symbol,
@@ -48,6 +49,5 @@ while True:
             print('SELL', sell_order)
         time.sleep(60*15)
     else:
-        print('market closed.', alpaca.get_clock())
         time.sleep(60)
     print("\n\n")
