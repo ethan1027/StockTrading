@@ -15,7 +15,7 @@ POLYGON_KEY = 'AKMSXURYBJ1CHOHYN396'
 
 alpaca = tradeapi.REST(API_KEY, API_SECRET, APCA_API_BASE_URL, 'v2')
 ti = TechIndicators(key=ALPHAVANTAGE_KEY, output_format='pandas')
-symbol = 'RP'
+symbol = 'BAC'
 while True:
     print(alpaca.get_clock())
     print('position', alpaca.list_positions())
