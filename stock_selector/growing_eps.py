@@ -1,6 +1,7 @@
 import alpaca_trade_api as tradeapi
 from polygon import RESTClient
 import pandas as pd
+import sys
 # POLYGON_KEY = 'AKMSXURYBJ1CHOHYN396'
 
 API_KEY = "PKWFUZFXNLV2J9FAXQIU"
@@ -20,8 +21,10 @@ large_marketcaps = []
 for symbol in nasdaq['Symbol']:
     try:
         ticker_details = client.reference_ticker_details(symbol)
-        if ticker_details.company.marketcap > 4000000000:
+        print(ticker_details.marketcap)
+        if ticker_details.marketcap > 4000000000:
             large_marketcaps.append(symbol)
     except Exception:
-        pass
-pd.DataFrame({ symbol: large_marketcaps }).to_csv('large_marketcaps')
+        print(sys.exc_info())
+# pd.DataFrame({ symbol: large_marketcaps }).to_csv('large_marketcaps')
+print(large_marketcaps)

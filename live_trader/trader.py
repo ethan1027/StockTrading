@@ -1,10 +1,11 @@
-import alpaca_trade_api as tradeapi
+import alpaca_tra_api as tradeapi
 import threading
 import time
 import datetime
 from alpha_vantage.techindicators import TechIndicators
 from polygon import RESTClient
 import pandas as pd
+import sys
 
 API_KEY = "PKWFUZFXNLV2J9FAXQIU"
 API_SECRET = "Y8F5q3GTRw5nbXiDfmEjGE/PUCvDb/WWzGCZBrbZ"
@@ -19,34 +20,37 @@ while True:
     print(alpaca.get_clock())
     print('position', alpaca.list_positions())
     if alpaca.get_clock().is_open:
-        fast_series, _ = ti.get_wma(symbol, interval='15min', time_period=4)
-        slow_series, _ = ti.get_wma(symbol, interval='15min', time_period=32)
-        fast = fast_series.iloc[-1]['WMA']
-        slow = slow_series.iloc[-1]['WMA']
-        print(f'fast: {fast}, slow: {slow}')
-        if len(alpaca.list_positions()) == 0:
-            if  fast > slow:
-                equity = 5000 + int(alpaca.get_account().equity) - 100000
-                price = alpaca.polygon.last_trade(symbol).price
-                qty = equity // price - 1
-                if qty > 0:
-                    buy_order = alpaca.submit_order(
-                        symbol=symbol,
-                        qty=qty,
-                        side='buy',
-                        type='market',
-                        time_in_force='day'
-                    )
-                    print('BUY', buy_order)
-        elif fast < slow:
-            sell_order = alpaca.submit_order(
-                symbol=symbol,
-                qty=alpaca.get_position(symbol).qty,
-                side='sell',
-                type='market',
-                time_in_force='day'
-            )
-            print('SELL', sell_order)
+        try:
+            fast_series, _ = ti.get_wma(symbol, interval='15min', time_period=4)
+            slow_series, _ = ti.get_wma(symbol, interval='15min', time_period=32)
+            fast = fast_series.iloc[-1]['WMA']
+            slow = slow_series.iloc[-1]['WMA']
+            print(f'fast: {fast}, slow: {slow}')
+            if len(alpaca.list_positions()) == 0:
+                if  fast > slow:
+                    equity = 5000 + int(alpaca.get_account().equity) - 100000
+                    price = alpaca.polygon.last_trade(symbol).price
+                    qty = equity // price - 1
+                    if qty > 0:
+                        buy_order = alpaca.submit_order(
+                            symbol=symbol,
+                            qty=qty,
+                            side='buy',
+                            type='market',
+                            time_in_force='day'
+                        )
+                        print('BUY', buy_order)
+            elif fast < slow:
+                sell_order = alpaca.submit_order(
+                    symbol=symbol,
+                    qty=alpaca.get_position(symbol).qty,
+                    side='sell',
+                    type='market',
+                    time_in_force='day'
+                )
+                print('SELL', sell_order)
+        except Exception:
+            print(sys.exc_info())
         time.sleep(60*15)
     else:
         time.sleep(60)
