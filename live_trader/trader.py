@@ -1,4 +1,4 @@
-import alpaca_tra_api as tradeapi
+import alpaca_trade_api as tradeapi
 import threading
 import time
 import datetime
