@@ -17,10 +17,10 @@ alpaca = tradeapi.REST(API_KEY, API_SECRET, APCA_API_BASE_URL, 'v2')
 ti = TechIndicators(key=ALPHAVANTAGE_KEY, output_format='pandas')
 symbol = 'BAC'
 while True:
-    print(alpaca.get_clock())
-    print('position', alpaca.list_positions())
     if alpaca.get_clock().is_open:
         try:
+            print(alpaca.get_clock())
+            print('position', alpaca.list_positions())
             fast_series, _ = ti.get_wma(symbol, interval='15min', time_period=4)
             slow_series, _ = ti.get_wma(symbol, interval='15min', time_period=32)
             fast = fast_series.iloc[-1]['WMA']
@@ -28,7 +28,7 @@ while True:
             print(f'fast: {fast}, slow: {slow}')
             if len(alpaca.list_positions()) == 0:
                 if  fast > slow:
-                    equity = 5000 + int(alpaca.get_account().equity) - 100000
+                    equity = 5000 + int(float(alpaca.get_account().equity)) - 100000
                     price = alpaca.polygon.last_trade(symbol).price
                     qty = equity // price - 1
                     if qty > 0:
