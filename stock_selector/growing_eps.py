@@ -2,12 +2,11 @@ import alpaca_trade_api as tradeapi
 from polygon import RESTClient
 import pandas as pd
 import sys
-# POLYGON_KEY = 'AKMSXURYBJ1CHOHYN396'
 
-API_KEY = "PKWFUZFXNLV2J9FAXQIU"
-API_SECRET = "Y8F5q3GTRw5nbXiDfmEjGE/PUCvDb/WWzGCZBrbZ"
+API_KEY = "*"
+API_SECRET = "*"
 APCA_API_BASE_URL = "https://paper-api.alpaca.markets"
-ALPHAVANTAGE_KEY = 'MR35347XSCWHHYDA'
+ALPHAVANTAGE_KEY = '*'
 alpaca = tradeapi.REST(API_KEY, API_SECRET, APCA_API_BASE_URL, 'v2')
 client = RESTClient(API_KEY)
 

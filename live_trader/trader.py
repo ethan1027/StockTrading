@@ -7,11 +7,11 @@ from polygon import RESTClient
 import pandas as pd
 import sys
 
-API_KEY = "PKWFUZFXNLV2J9FAXQIU"
-API_SECRET = "Y8F5q3GTRw5nbXiDfmEjGE/PUCvDb/WWzGCZBrbZ"
+API_KEY = "*"
+API_SECRET = "*"
 APCA_API_BASE_URL = "https://paper-api.alpaca.markets"
-ALPHAVANTAGE_KEY = 'MR35347XSCWHHYDA'
-POLYGON_KEY = 'AKMSXURYBJ1CHOHYN396'
+ALPHAVANTAGE_KEY = '*'
+POLYGON_KEY = '*'
 
 alpaca = tradeapi.REST(API_KEY, API_SECRET, APCA_API_BASE_URL, 'v2')
 ti = TechIndicators(key=ALPHAVANTAGE_KEY, output_format='pandas')
