@@ -1,1 +1,1 @@
-Previous version of PolarBear Quant Trading project.
+A beta version of the quant trading project.
