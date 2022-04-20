@@ -5,7 +5,7 @@ import multiprocessing
 import pandas as pd
 import statistics
 
-api_key = 'AKMSXURYBJ1CHOHYN396'
+api_key = '*'
 
 class KstockModel:
     def __init__(self, ticker, avg_vol):
